@@ -2,14 +2,13 @@
 A simple (heuristic-based) algorithm for online saccade onset detection with the HTC Vive Pro Eye VR headset.
 
 ## Download
-To use our saccade detection, simply download and import TODO into your Unity project (tested with Unity version TODO).
+To use our saccade detection, simply download and import [`saccade-detection-v2.unitypackage`](saccade-detection-v2.unitypackage) into your Unity project (tested with Unity version 2021.3.7f1 LTS).
 
 ## Requirements
 To use our saccade detection in your own Unity application, make sure to have the following assets imported in your project:
 
-[Sranipal](https://developer.vive.com/resources/vive-sense/eye-and-facial-tracking-sdk/download/latest/)
-
-[SteamVR](https://assetstore.unity.com/packages/tools/integration/steamvr-plugin-32647)
+* [SteamVR](https://assetstore.unity.com/packages/tools/integration/steamvr-plugin-32647)
+* [SRanipal](https://developer.vive.com/resources/vive-sense/eye-and-facial-tracking-sdk/download/latest/)
 
 ## How to use
 To check out an example scene, just open and start any of the scenes that come with our package.  
