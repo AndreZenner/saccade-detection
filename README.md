@@ -6,12 +6,23 @@ To use our saccade detection, simply download and import TODO into your Unity pr
 
 ## Requirements
 To use our saccade detection in your own Unity application, make sure to have the following assets imported in your project:
-* TODO ...
+
+[Sranipal](https://developer.vive.com/resources/vive-sense/eye-and-facial-tracking-sdk/download/latest/)
+
+[SteamVR](https://assetstore.unity.com/packages/tools/integration/steamvr-plugin-32647)
 
 ## How to use
 To check out an example scene, just open and start any of the scenes that come with our package.  
 To add saccade detection to your own scene do the following:
-* TODO
+
+add to your scene:
+
+
+SaccadeDetection prefab
+
+SRanipal Eye Framework prefab from SRanipal (ViveSR)
+
+CameraRig prefab from SteamVR
 
 ## Credits
 Before use, please see the [LICENSE](LICENSE.md) for copyright and license details.
