@@ -1,5 +1,5 @@
 # saccade-detection
-A simple (heuristic-based) algorithm for online saccade onset detection with the HTC Vive Pro Eye VR headset.
+A simple (heuristic-based) algorithm for online **saccade onset** and **blink** detection with the HTC Vive Pro Eye VR headset.
 
 ## Download
 To use our saccade detection, simply download and import [`saccade-detection-v2.unitypackage`](saccade-detection-v2.unitypackage) into your Unity project (tested with Unity version 2021.3.7f1 LTS).
