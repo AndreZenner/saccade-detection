@@ -1,9 +1,11 @@
 # Saccade Detection
 A simple (heuristic-based) algorithm for online **saccade onset** and **blink** detection with the HTC Vive Pro Eye VR headset.  
-Most parameters of the Saccade Detection **algorithm can be modified in the [inspector](#saccade-detection-settings)**.  
-We chose a setting which fits quite well in our eyes. However, depending on your usage, another setting might perform more reliable - so feel free adjusting the given parameters.  
-Detections can be noticed by hearing a sound or when looking in the console.  
-Whenever a saccade occurs a sound is played and 'saccade detected' shows up in the console. Once a saccade onset is detected the event *SaccadeOccured* is fired and the *saccade* variable turns true. When a blink is detected a different sound is played and is also written into the console. Once a blink is detected the event *BlinkOccured* is fired and the *blink* variable turns true.
+
+Most parameters of the Saccade Detection **algorithm can be modified in the inspector**.  
+Per default, the parameters are configured so that they perform well for us and our (few) test users. However, depending on your usage, another setting might perform more reliably - so feel free to adjust the given parameters.  
+
+For debugging purposes, detections are indicated by a sound and a message in the console.  
+Specifically, whenever a saccade occurs, a sound is played and 'saccade detected' shows up in the console. Once a saccade onset is detected the event `SaccadeOccured` is fired and the `saccade` variable turns `true`. When a blink is detected, a different sound is played and it is also written into the console. Once a blink is detected the event `BlinkOccured` is fired and the `blink` variable turns `true`.
 
 ## Download
 To use our saccade detection, simply download and import [**saccade-detection-v2.unitypackage**](saccade-detection-v2.unitypackage) into your Unity project (tested with Unity version 2021.3.7f1 LTS).
@@ -14,15 +16,15 @@ To use our saccade detection in your own Unity application, make sure to have th
 - [**SteamVR**](https://assetstore.unity.com/packages/tools/integration/steamvr-plugin-32647)
 - [**SRanipal**](https://developer.vive.com/resources/vive-sense/eye-and-facial-tracking-sdk/download/latest/)
 
-## How to use
+## How to Use
 ### Example Scene
 To check out an example scene, just open and start any of the scenes that come with our package. For further details look at the corresponding [Example Scene](#example-scenes) section  
 
-### Implement Own Scene
+### Adding Saccade Detection to Your Own Scene
 add to your scene:  
 
   - **`SaccadeDetection prefab`**  
-  - **`SRanipal Eye Framework prefab`** from SRanipal (ViveSR)   
+  - **`SRanipal_Eye_Framework prefab`** from SRanipal (ViveSR)   
     - check the `Enable Eye Data` box  
     - select *Version 2* for `Enable Eye Version`  
   - **`CameraRig prefab`** from SteamVR  
@@ -31,22 +33,23 @@ add to your scene:
 
 
 ## Saccade Detection Inspector
+All the logic of the saccade and blink detection is implemented by the `SaccadeDetection` script (which is part of the prefab).  
 The picture below shows the *Saccade Detection Inspector* including all *adjustable variables*.
 
 <p><img src="pics/SD-inspector-screenshot-variables.PNG" alt="Saccade Detection Inspector Variables" width="350"></p>
 
 
 ### Shown Data Settings  
-prints certain variable values into the consolem, such as:
+prints certain variable values into the console, such as:
 
 `Show_PhysicalCalculations`  
-*true*: writes **angle, speed and acceleration** values for current retrieved data into the console.
+*true*: writes **angle, speed, and acceleration** values for the current retrieved eye data into the console.
 
 `Show_Framerate`  
-*true*: writes the current **Update and EyeTracker frequence** for each second into the console.
+*true*: writes the current **Update and EyeTracker frequency** for each second into the console.
 
 `Show_Eye`  
-*true*: writes **'Eyes closed'** into the console whenever the EyeValue undercuts the closedEyeThreshold.
+*true*: writes **'Eyes closed'** into the console whenever the `EyeValue` falls below the `closedEyeThreshold`.
 
 
 ### Test Mode  
@@ -60,14 +63,14 @@ prints certain variable values into the consolem, such as:
 ### Saccade Detection Mode  
 
 `Separate Eye`  
-*true*: all physical calculations are computed **for each eye**. The corresponding thresholds must exceed **both** eye values.  
+*true*: all physical calculations are computed **separately for each eye**. The corresponding thresholds must be exceeded by **both** eyes' values.  
 *false*: all physical calculations are computed according to the **combined eye value**.
 
 
 ### Saccade Detection Thresholds  
 
 `Speed Threshold`  
-Speed Threshold for Saccade Detection *[degrees/ second]*. If **eye rotation > threshold** then it might be a  saccade.
+Speed Threshold for Saccade Detection *[degrees/ second]*. If **eye rotation > threshold** then it might be a saccade.
 
 `Speed Threshold Once`  
 Speed Threshold for Saccade Detection *[degrees/ second²]* which only needs to be **exceeded ONCE in 3 frames**. This is included in the sample threshold.
