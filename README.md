@@ -32,6 +32,18 @@ add to your scene:
 <p><img src="pics/SRanipal-inspector-screenshot.PNG" alt="SRanipal Eye Framework Inspector" width="350"></p>
 
 
+**accessing data**:
+
+The data can easily be accessed by reading the public variable **saccade** of the Saccade Detection or by linking an own method to the unity events **saccadeOccured()** and **saccadeIsOver()** (same with accessing the blink data).  
+
+Below you find an example code on how to *access the data via the unity events*:  
+
+<p><img src="pics/SD-Code-readData.PNG" alt="SRanipal Eye Framework Inspector" width="500"></p>
+
+To link the created methods to the unity events you need to assign the GameObject carrying the script to the corresponding Unity-Event. In this example I created an empty GameObject called *--- accesss values ---* and attached the script above (*accessingValues*) to it. Then you need to match the different methods from the script to the unity events.
+<p><img src="pics/SD-Events-readingData.PNG" alt="SRanipal Eye Framework Inspector" width="500"></p>
+
+
 ## Saccade Detection Inspector
 All the logic of the saccade and blink detection is implemented by the `SaccadeDetection` script (which is part of the prefab).  
 The picture below shows the *Saccade Detection Inspector* including all *adjustable variables*.
@@ -73,7 +85,7 @@ prints certain variable values into the console, such as:
 Speed Threshold for Saccade Detection *[degrees/ second]*. If **eye rotation > threshold** then it might be a saccade.
 
 `Speed Threshold Once`  
-Speed Threshold for Saccade Detection *[degrees/ second²]* which only needs to be **exceeded ONCE in 3 frames**. This is included in the sample threshold.
+Speed Threshold for Saccade Detection *[degrees/ second]* which only needs to be **exceeded ONCE in 3 frames**.  
 
 `Speed Noise Threshold`  
 Speed Threshold above which considered measured speed as noise *[degrees/ second]*. If **eye rotation > threshold** then the current sample does not increase the sample counter.
@@ -82,7 +94,7 @@ Speed Threshold above which considered measured speed as noise *[degrees/ second
 Acceleration Threshold for Saccade Detection *[degrees/ second²]*. If **eye rotation > threshold** then it might be a saccade.
 
 `Sample Threshold`  
-**How many** of the most recent **speed samples must exceed** the defined speedThreshold. OnceSpeed is included in this one.
+**How many** of the most recent **speed samples must exceed** the defined speedThreshold.  
 
 `Break Threshold`  
 For **breakThreshold seconds** after a blink there will be **no saccades detected**.
