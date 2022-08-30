@@ -32,6 +32,18 @@ add to your scene:
 <p><img src="pics/SRanipal-inspector-screenshot.PNG" alt="SRanipal Eye Framework Inspector" width="350"></p>
 
 
+**accessing data**:
+
+The data can easily be accessed by reading the public variable **saccade** of the Saccade Detection or by linking an own method to the unity events **saccadeOccured()** and **saccadeIsOver()** (same with accessing the blink data).  
+
+Below you find an example code on how to *access the data via the unity events*:  
+
+<p><img src="pics/SD-Code-readData.PNG" alt="SRanipal Eye Framework Inspector" width="500"></p>
+
+To link the created methods to the unity events you need to assign the GameObject carrying the script to the corresponding Unity-Event. In this example I created an empty GameObject called *--- accesss values ---* and attached the script above (*accessingValues*) to it. Then you need to match the different methods from the script to the unity events.
+<p><img src="pics/SD-Events-readingData.PNG" alt="SRanipal Eye Framework Inspector" width="500"></p>
+
+
 ## Saccade Detection Inspector
 All the logic of the saccade and blink detection is implemented by the `SaccadeDetection` script (which is part of the prefab).  
 The picture below shows the *Saccade Detection Inspector* including all *adjustable variables*.
@@ -73,7 +85,7 @@ prints certain variable values into the console, such as:
 Speed Threshold for Saccade Detection *[degrees/ second]*. If **eye rotation > threshold** then it might be a saccade.
 
 `Speed Threshold Once`  
-Speed Threshold for Saccade Detection *[degrees/ second²]* which only needs to be **exceeded ONCE in 3 frames**. This is included in the sample threshold.
+Speed Threshold for Saccade Detection *[degrees/ second]* which only needs to be **exceeded ONCE in 3 frames**.  
 
 `Speed Noise Threshold`  
 Speed Threshold above which considered measured speed as noise *[degrees/ second]*. If **eye rotation > threshold** then the current sample does not increase the sample counter.
@@ -82,13 +94,20 @@ Speed Threshold above which considered measured speed as noise *[degrees/ second
 Acceleration Threshold for Saccade Detection *[degrees/ second²]*. If **eye rotation > threshold** then it might be a saccade.
 
 `Sample Threshold`  
-**How many** of the most recent **speed samples must exceed** the defined speedThreshold. OnceSpeed is included in this one.
+**How many** of the most recent **speed samples must exceed** the defined speedThreshold.  
 
 `Break Threshold`  
-For **breakThreshold seconds** after a blink there will be **no saccades detected**.
+For **breakThreshold seconds** after a blink there will be **no saccades detected**. If the value is too low, the algorithm might detect a non-existing saccade due to the high acceleration when opening the eyes.
 
 `Closed Eye Threshold`  
 Threshold which determines whether the eye is interpreted as **closed** (if **eyeOpeness < closedEyeThreshold**) or not. Eye Openess values are in the range *from 0.0 (closed) to 1.0 (open)*.
+
+
+### adjusting the parameters
+higher *Speed Threshold, Speed Threshold Once, Acceleration Threshold* and/ or the *Sample Threshold* ➜ later saccade detection, smaller saccades will not be detected, (**important**: the false rate might increase due to the *allowedRange* parameter in the `TestScenario` - meaning that right but late detections count as false. To receive a better true/ false analysis independent of the detection delay increase the *allowedRange*)    
+higher *Speed Noise Threshold* ➜ more use of noisy data, more false saccade detections  
+higher *Break Threshold* ➜ bigger detection break after a blink, less saccades detected right after a blink, less false detected saccades after a blink due to inaccurate tracking/ noise  
+higher *Closed Eye Threshold* ➜ more blinks, more detection breaks, less use of noisy data which might occur during blinks  
 
 
 ## Example Scenes
@@ -106,13 +125,25 @@ The cubes are placed in distances according to the current example scene. The cu
 
 **Hierarchy**:  
 The main elements are: [Saccade Detection](#saccade-detection-settings), [Eye Tracking](#requirements), [SteamVR](#requirements), Test Scene Logic, Visualization & Room  
-The Test Scene Logic consists of the Logging *(see below)* and the Test Scenario Module.  
-The Test Scenario checks whether the highlighted cube has been focused for the given time, manages the cube highlighting order and knows when a saccade should occur (called saccade ground truth). So the Test Scenario manages the main test procedure.  
+The Test Scene Logic consists of the Logging and the Test Scenario Module.  
+
 <p><img src="pics/SD-easyScene-hierarchy-2.PNG" alt="Saccade Detection Example Scene Easy Hierarchy" width="350"></p>
 
 **Logging Inspector**:  
 The Logging Module frame-wise logs the values of different variables and stores them in a .csv file. Therefore, it needs the path of the directory in which the file should be stored. Additionally, you can decide whether you want the file to be overwritten when starting the scene again or a new file should be created each time. 
 <p><img src="pics/Logging-inspector.PNG" alt="Logging" width="350"></p>
+
+**Test Scenario Inspector**:  
+The Test Scenario checks whether the highlighted cube has been focused for the given time, manages the cube highlighting order and knows when a saccade should occur (called saccade ground truth). So the Test Scenario manages the main test procedure.  
+
+`Duration`  
+how long each cube needs to be focused until the cube switches *[ms]* 
+
+`Input Path`  
+the path of the input file which should be used for the simulation of the *TestScenario*. **important**: the file needs to have a specific structure. For the simulation it is the easiest to use a loggingFile which has been created during the TestMode earlier.  
+
+`Allowed Range`   
+**how many timestamps before/ after the true saccade onset count as correctly detected**. *The higher*, the more correct the correct/ false rate but also quite late detections count as correct. *The lower*, the higher the false rate since it will contain right but late detections.
 
 ## Credits
 Before use, please see the [LICENSE](LICENSE.md) for copyright and license details.
