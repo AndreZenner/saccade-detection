@@ -38,10 +38,10 @@ The data can easily be accessed by reading the public variable **saccade** of th
 
 Below you find an example code on how to *access the data via the unity events*:  
 
-<p><img src="pics/SD-Code-readData.PNG" alt="SRanipal Eye Framework Inspector" width="500"></p>
+<p><img src="pics/SD-Code-readData.PNG" alt="Saccade Detection Code for accessing data" width="500"></p>
 
 To link the created methods to the unity events you need to assign the GameObject carrying the script to the corresponding Unity-Event. In this example I created an empty GameObject called *--- accesss values ---* and attached the script above (*accessingValues*) to it. Then you need to match the different methods from the script to the unity events.
-<p><img src="pics/SD-Events-readingData.PNG" alt="SRanipal Eye Framework Inspector" width="500"></p>
+<p><img src="pics/SD-Events-readingData.PNG" alt="Saccade Detection Events" width="500"></p>
 
 
 ## Saccade Detection Inspector
@@ -103,7 +103,7 @@ For **breakThreshold seconds** after a blink there will be **no saccades detecte
 Threshold which determines whether the eye is interpreted as **closed** (if **eyeOpeness < closedEyeThreshold**) or not. Eye Openess values are in the range *from 0.0 (closed) to 1.0 (open)*.
 
 
-### adjusting the parameters
+### Adjusting of the Parameters
 higher *Speed Threshold, Speed Threshold Once, Acceleration Threshold* and/ or the *Sample Threshold* ➜ later saccade detection, smaller saccades will not be detected, (**important**: the false rate might increase due to the *allowedRange* parameter in the `TestScenario` - meaning that right but late detections count as false. To receive a better true/ false analysis independent of the detection delay increase the *allowedRange*)    
 higher *Speed Noise Threshold* ➜ more use of noisy data, more false saccade detections  
 higher *Break Threshold* ➜ bigger detection break after a blink, less saccades detected right after a blink, less false detected saccades after a blink due to inaccurate tracking/ noise  
@@ -144,6 +144,8 @@ the path of the input file which should be used for the simulation of the *TestS
 
 `Allowed Range`   
 **how many timestamps before/ after the true saccade onset count as correctly detected**. *The higher*, the more correct the correct/ false rate but also quite late detections count as correct. *The lower*, the higher the false rate since it will contain right but late detections.
+
+<p><img src="pics/TestScenario-inspector.PNG" alt="TestScenario" width="350"></p>
 
 ## Credits
 Before use, please see the [LICENSE](LICENSE.md) for copyright and license details.
