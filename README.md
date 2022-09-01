@@ -47,14 +47,14 @@ The data can easily be accessed by reading the public variable **saccade** of th
 
 To **link the created methods to the unity events** you need to assign the GameObject carrying the script to the corresponding Unity-Event. In this example I created an empty GameObject called *readData* and attached the script above (*ExampleScript2*) to it. Then you need to match the different methods from the script to the unity events.  
 
-<p><img src="pics/SD-Events-readingData.PNG" alt="Saccade Detection Events" width="500"></p>
+<p><img src="pics/SD-Events-readingData.PNG" alt="Saccade Detection Events" width="350"></p>
 
 
 ## Saccade Detection Inspector
 All the logic of the saccade and blink detection is implemented by the `SaccadeDetection` script (which is part of the prefab).  
 The picture below shows the *Saccade Detection Inspector* including all *adjustable variables*.
 
-<p><img src="pics/SD-inspector-screenshot-variables.PNG" alt="Saccade Detection Inspector Variables" width="350"></p>
+<p><img src="pics/SD-inspector-screenshot-variables.PNG" alt="Saccade Detection Variables" width="500"></p>
 
 
 ### Shown Data Settings  
