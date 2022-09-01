@@ -36,11 +36,17 @@ add to your scene:
 
 The data can easily be accessed by reading the public variable **saccade** of the Saccade Detection or by linking an own method to the unity events **saccadeOccured()** and **saccadeIsOver()** (same with accessing the blink data).  
 
-Below you find an example code on how to *access the data via the unity events*:  
+**ExampleScript1** for accessing the data **via public variables**:  
 
-<p><img src="pics/SD-Code-readData.PNG" alt="Saccade Detection Code for accessing data" width="500"></p>
+<p><img src="pics/readData-example1.PNG" alt="ExampleScript1 for accessing data via public variables" width="500"></p>
 
-To link the created methods to the unity events you need to assign the GameObject carrying the script to the corresponding Unity-Event. In this example I created an empty GameObject called *--- accesss values ---* and attached the script above (*accessingValues*) to it. Then you need to match the different methods from the script to the unity events.
+
+**ExampleScript2** for accessing the data **via events**:  
+
+<p><img src="pics/readData-example1.PNG" alt="ExampleScript2 for accessing data via events" width="500"></p>
+
+To **link the created methods to the unity events** you need to assign the GameObject carrying the script to the corresponding Unity-Event. In this example I created an empty GameObject called *readData* and attached the script above (*ExampleScript2*) to it. Then you need to match the different methods from the script to the unity events.  
+
 <p><img src="pics/SD-Events-readingData.PNG" alt="Saccade Detection Events" width="500"></p>
 
 
@@ -90,13 +96,13 @@ Speed Threshold for Saccade Detection *[degrees/ second]* which only needs to be
 `Speed Noise Threshold`  
 Speed Threshold above which considered measured speed as noise *[degrees/ second]*. If **eye rotation > threshold** then the current sample does not increase the sample counter.
 
-`Acceleration Threshold`  
-Acceleration Threshold for Saccade Detection *[degrees/ second²]*. If **eye rotation > threshold** then it might be a saccade.
+`Acceleration Threshold Once`  
+Acceleration Threshold for Saccade Detection *[degrees/ second²]*. If **one in 3 eye rotation > threshold** then it might be a saccade.
 
-`Sample Threshold`  
+`Minimum Samples`  
 **How many** of the most recent **speed samples must exceed** the defined speedThreshold.  
 
-`Break Threshold`  
+`Break Timer`  
 For **breakThreshold seconds** after a blink there will be **no saccades detected**. If the value is too low, the algorithm might detect a non-existing saccade due to the high acceleration when opening the eyes.
 
 `Closed Eye Threshold`  
@@ -104,10 +110,13 @@ Threshold which determines whether the eye is interpreted as **closed** (if **ey
 
 
 ### Adjusting of the Parameters
-higher *Speed Threshold, Speed Threshold Once, Acceleration Threshold* and/ or the *Sample Threshold* ➜ later saccade detection, smaller saccades will not be detected, (**important**: the false rate might increase due to the *allowedRange* parameter in the `TestScenario` - meaning that right but late detections count as false. To receive a better true/ false analysis independent of the detection delay increase the *allowedRange*)    
+higher *Speed Threshold, Speed Threshold Once, Acceleration Threshold* and/ or the *Sample Threshold* ➜ later saccade detection, smaller saccades will not be detected, (**important**: the false rate might increase due to the *allowedRange* parameter in the `TestScenario` - meaning that right but late detections count as false. To receive a better true/ false analysis independent of the detection delay increase the *allowedRange*)   
+
 higher *Speed Noise Threshold* ➜ more use of noisy data, more false saccade detections  
+
 higher *Break Threshold* ➜ bigger detection break after a blink, less saccades detected right after a blink, less false detected saccades after a blink due to inaccurate tracking/ noise  
-higher *Closed Eye Threshold* ➜ more blinks, more detection breaks, less use of noisy data which might occur during blinks  
+
+higher *Closed Eye Threshold* ➜ more blinks, more detection breaks, less noisy data used which might occur during blinks  
 
 
 ## Example Scenes
