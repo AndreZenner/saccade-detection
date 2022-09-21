@@ -8,7 +8,7 @@ For debugging purposes, detections are indicated by a sound and a message in the
 Specifically, whenever a saccade occurs, a sound is played and 'saccade detected' shows up in the console. Once a saccade onset is detected the event `SaccadeOccured` is fired and the `saccade` variable turns `true`. When a blink is detected, a different sound is played and it is also written into the console. Once a blink is detected the event `BlinkOccured` is fired and the `blink` variable turns `true`.
 
 ## Download
-To use our saccade detection, simply download and import [**saccade-detection-v2.unitypackage**](saccade-detection-v2.unitypackage) into your Unity project (tested with Unity version 2021.3.7f1 LTS).
+To use our saccade detection, simply download and import [**saccade-detection-v3.unitypackage**](saccade-detection-v3.unitypackage) into your Unity project (tested with Unity version 2021.3.7f1 LTS).
 
 ## Requirements
 To use our saccade detection in your own Unity application, make sure to have the following assets imported in your project:
