@@ -56,7 +56,7 @@ public class CubeManager : MonoBehaviour
     RaycastHit hit;                             // collision information from combined eye gaze
     RaycastHit hitLeft;                         // "" left eye gaze
     RaycastHit hitRight;                        // "" right eye gaze
-    int currentHitDuration = 0;                  // counts sequential eye gaze collision with current cube
+    int currentHitDuration = 0;                 // counts sequential eye gaze collision with current cube
 
 
     // Start is called before the first frame update
@@ -120,19 +120,19 @@ public class CubeManager : MonoBehaviour
     {
         if (plotGazeRay)
         {
-            if (!saccadeDetection.SeparateEye)
+            if (!saccadeDetection.separateEye)
             {
                 // plots single combined gazeRay
-                gazeRayRenderer.SetPosition(0, eyeOriginGlobal - Vector3.up * 0.05f);
+                gazeRayRenderer.SetPosition(0, eyeOriginGlobal - Vector3.up * 0.02f);
                 gazeRayRenderer.SetPosition(1, eyeOriginGlobal + eyeDirectionGlobal);
                 gazeRayRendererSeparate.enabled = false;
             }
             else
             {
                 // separateEye
-                gazeRayRenderer.SetPosition(0, eyeOriginLeftGlobal - Vector3.up * 0.05f);
+                gazeRayRenderer.SetPosition(0, eyeOriginLeftGlobal - Vector3.up * 0.02f);
                 gazeRayRenderer.SetPosition(1, eyeOriginLeftGlobal + eyeDirectionLeftGlobal);
-                gazeRayRendererSeparate.SetPosition(0, eyeOriginRightGlobal - Vector3.up * 0.05f);
+                gazeRayRendererSeparate.SetPosition(0, eyeOriginRightGlobal - Vector3.up * 0.02f);
                 gazeRayRendererSeparate.SetPosition(1, eyeOriginRightGlobal + eyeDirectionRightGlobal);
             }
         }

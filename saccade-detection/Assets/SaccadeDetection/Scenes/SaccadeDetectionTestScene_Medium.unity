@@ -237,43 +237,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 14931928}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!21 &112965840
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Sprites/Default
-  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _AlphaTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats:
-    - PixelSnap: 0
-    - _EnableExternalAlpha: 0
-    m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Flip: {r: 1, g: 1, b: 1, a: 1}
-    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
-  m_BuildTextureStacks: []
 --- !u!1001 &137211767
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -283,6 +246,10 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 633189995777109766, guid: fa60c1f78a1dcc94888e85cbbc1f712c, type: 3}
       propertyPath: TestMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 633189995777109766, guid: fa60c1f78a1dcc94888e85cbbc1f712c, type: 3}
+      propertyPath: separateEye
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4375067644541971255, guid: fa60c1f78a1dcc94888e85cbbc1f712c, type: 3}
@@ -370,7 +337,7 @@ MonoBehaviour:
   gazeRayRenderer: {fileID: 645567774}
   gazeRayRendererSeparate: {fileID: 1434020278}
   MinimumHitDuration: 20
-  plotGazeRay: 0
+  plotGazeRay: 1
   DEBUG_Cubes: 0
   numCubes: 0
 --- !u!4 &171937988
@@ -449,6 +416,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 120639579195300032, guid: 365dc3c335a5e88408e7792556958cfc, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d9812a4c71fc1f34d95b65df667d0d3e, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 365dc3c335a5e88408e7792556958cfc, type: 3}
 --- !u!1 &206956834
@@ -780,11 +751,11 @@ PrefabInstance:
     - target: {fileID: 2348914, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 112965840}
+      objectReference: {fileID: 1444056063}
     - target: {fileID: 3380982, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 1282987439}
+      objectReference: {fileID: 1143536046}
     - target: {fileID: 11489174, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
       propertyPath: size
       value: 2
@@ -1181,7 +1152,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!43 &1282987439
+--- !u!43 &1143536046
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1529,6 +1500,43 @@ LineRenderer:
   m_CorrespondingSourceObject: {fileID: 120639579195300032, guid: 365dc3c335a5e88408e7792556958cfc, type: 3}
   m_PrefabInstance: {fileID: 192440242}
   m_PrefabAsset: {fileID: 0}
+--- !u!21 &1444056063
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Sprites/Default
+  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _AlphaTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - PixelSnap: 0
+    - _EnableExternalAlpha: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Flip: {r: 1, g: 1, b: 1, a: 1}
+    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1001 &1493664002
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1588,6 +1596,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 120639579195300032, guid: 365dc3c335a5e88408e7792556958cfc, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d9812a4c71fc1f34d95b65df667d0d3e, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 365dc3c335a5e88408e7792556958cfc, type: 3}
 --- !u!1 &1505179260
@@ -2013,6 +2025,10 @@ PrefabInstance:
       propertyPath: testScenario
       value: 
       objectReference: {fileID: 1132224111}
+    - target: {fileID: 7502162081812055013, guid: 9992371ba2286204e8404cb14493f0f8, type: 3}
+      propertyPath: DirectoryPath
+      value: C:\Users\chiarakarr\Desktop\Work\SD-video
+      objectReference: {fileID: 0}
     - target: {fileID: 7502162081812055013, guid: 9992371ba2286204e8404cb14493f0f8, type: 3}
       propertyPath: saccadeDetection
       value: 

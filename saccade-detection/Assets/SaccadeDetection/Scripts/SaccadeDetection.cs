@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using ViveSR.anipal.Eye;
 
-// TODO:
-// overthink separateNoSaccadeCondition() --> better one?
 
 
 public class SaccadeDetection : MonoBehaviour
@@ -13,21 +11,21 @@ public class SaccadeDetection : MonoBehaviour
 
     #region Inspector
     [Header("Shown Data Settings")]
-    [Tooltip("true: writes angle, speed and acceleration values for current retrieved data into the console")]
+    [Tooltip("true: writes angle, speed and acceleration values for current retrieved data into the console.")]
     public bool Show_PhysicalCalculations = false;
-    [Tooltip("true: writes the current Update and EyeTracker frequence for each second into the console")]
+    [Tooltip("true: writes the current Update and EyeTracker frequence for each second into the console.")]
     public bool Show_Framerate = false;
-    [Tooltip("true: writes 'Eyes closed' into the console whenever the EyeValue undercuts the closedEyeThreshold")]
+    [Tooltip("true: writes 'Eyes closed' into the console whenever the EyeValue undercuts the closedEyeThreshold.")]
     public bool Show_Eye = false;
 
     [Header("TestMode")]
     public bool TestMode = false;
-    [Tooltip("true: the .csv inputFile in !TestScenario! is used for every algorithm analysis, resulting in better comparisons")]
+    [Tooltip("true: the .csv inputFile in !TestScenario! is used for every algorithm analysis, resulting in better comparisons.")]
     public bool SimulateInput = false;      // static bool for EyeCallback
 
     [Tooltip("Saccade Detection Modes, additional to basic: Speed, Sample Threshold,..")]
     [Header("Saccade Detection Mode")]
-    public bool SeparateEye = false;
+    public bool separateEye = false;
 
     // Saccade Detection
 
@@ -38,25 +36,25 @@ public class SaccadeDetection : MonoBehaviour
     [Range(50, 400)]
     int speedThreshold = 80;
     [SerializeField]
-    [Tooltip("Speed Threshold for Saccade Detection [degrees/ second^2] which only needs to be exceeded ONCE in 3 frames. This is included in the sample threshold.")]
+    [Tooltip("Speed Threshold for Saccade Detection [degrees/ second] which only needs to be exceeded ONCE in 3 frames.")]
     [Range(0, 500)]
     int speedThresholdOnce = 130;
     [SerializeField]
-    [Tooltip("Speed threshold above which considered measured speed as noise [degrees/ second]. If eye rotation exceeds threshold then the current sample does not increase the sample counter")]
+    [Tooltip("Speed Threshold above which considered measured speed as noise [degrees/ second]. If eye rotation exceeds threshold then the current sample does not increase the sample counter.")]
     [Range(400, 1000)]
     int speedNoiseThreshold = 800;
     [SerializeField]
-    [Tooltip("Acceleration Threshold for Saccade Detection [degrees/ second^2]. If eye rotation exceeds threshold then it might be a saccade")]
+    [Tooltip("Acceleration Threshold for Saccade Detection [degrees/ second^2]. If one of the last 3 eye rotation values exceed this threshold then it might be a saccade.")]
     [Range(0, 30000)]
-    int accelerationThreshold = 1000;
+    int accelerationThresholdOnce = 1000;
     [SerializeField]
-    [Tooltip("How many of the most recent of all speed samples must exceed the defined speedThreshold. OnceSpeed is included in this one.")]
+    [Tooltip("How many of the most recent of all speed samples must exceed the defined speedThreshold.")]
     [Range(0, 5)]
-    int sampleThreshold = 2;
+    int minimumSamples = 2;
     [SerializeField]
-    [Tooltip("For 'breakThreshold seconds' after a blink no saccades will be detected")]
+    [Tooltip("For 'breakThreshold seconds' after a blink no saccades will be detected.")]
     [Range(0.0f, 0.2f)]
-    float breakThreshold = 0.007f;
+    float breakTimer = 0.007f;
     [SerializeField]
     [Tooltip("Threshold which determines whether the eye is interpreted as closed (if eyeOpeness < closedEyeThreshold) or not. " +
              "Eye Openess values are in the range from 0.0 (closed) to 1.0 (open)")]
@@ -84,7 +82,7 @@ public class SaccadeDetection : MonoBehaviour
 
     // Analysis helpers
     Settings currentSettings;
-    int accelerationFrameRange = 3;
+    int onceFrameRange = 3;
     float[] lastAccelerations;
     float[] lastSpeedValues;
     int currAccIndex = 0;
@@ -138,21 +136,27 @@ public class SaccadeDetection : MonoBehaviour
     float speed = 0.0f;         // angle movement / deltaTime             unit: degrees/s       for correct unit
     float oldSpeed = 0;         // speed from one sample before
     float acceleration;         // (speed - oldSpeed) / deltaTime         unit: degrees/s^2     for correct unit
-    bool saccade = false;               // true when saccade is detected. false when over again. Avoids detecting still ongoing but already detected saccade.
+    [HideInInspector]
+    public bool saccade = false;        // true when saccade is detected. false when over again. Avoids detecting still ongoing but already detected saccade.
     static int sampleCounter = 0;       // counts the number of adjacent samples which fulfill the saccade criterion. if sampleCounter > sampleThreshold --> saccade
                                         // ToDo: duplicate if left, right eye seperate !!
     static bool processed = true;       // true if current eyeData already has been checked/ processed. false if new data available. Avoids checking same samples multiple times
     float blockedTimer = 0;             // over timestamps??        // blocks SaccadeDetection after blink for breakThreshold seconds. blockedTimer reset after blink 
-    bool blink = false;            // true if eyes closed. if true and eye open (means eye is opening again) --> reset blockedTimer. Also avoids detecting closed eye multiple times
+    [HideInInspector]
+    public bool blink = false;            // true if eyes closed. if true and eye open (means eye is opening again) --> reset blockedTimer. Also avoids detecting closed eye multiple times
 
-    // SIMULATION
+
+
+    // SIMULATION & EVENTS
     static bool dataNeeded = false;      // static bool for EyeCallback
     bool saccadeTruth = false;
     public UnityEvent NewDataAvailable = new UnityEvent();
     public UnityEvent SaccadeDetectionDataAvailable = new UnityEvent();
     public UnityEvent NewDataNeeded = new UnityEvent();
     public UnityEvent SaccadeOccured = new UnityEvent();
+    public UnityEvent SaccadeIsOver = new UnityEvent();
     public UnityEvent BlinkOccured = new UnityEvent();
+    public UnityEvent BlinkIsOver = new UnityEvent();
     bool isExperimentRunning = false;
 
     #endregion
@@ -168,9 +172,9 @@ public class SaccadeDetection : MonoBehaviour
         // needed for static EyeCallback
         dataNeeded = !SimulateInput;
 
-        currentSettings = new Settings(SeparateEye, speedThreshold, speedThresholdOnce, speedNoiseThreshold, accelerationThreshold, sampleThreshold, breakThreshold, closedEyeThreshold);
-        lastAccelerations = new float[accelerationFrameRange];
-        lastSpeedValues = new float[accelerationFrameRange];
+        currentSettings = new Settings(separateEye, speedThreshold, speedThresholdOnce, speedNoiseThreshold, accelerationThresholdOnce, minimumSamples, breakTimer, closedEyeThreshold);
+        lastAccelerations = new float[onceFrameRange];
+        lastSpeedValues = new float[onceFrameRange];
     }
 
     private void Update()
@@ -219,8 +223,6 @@ public class SaccadeDetection : MonoBehaviour
 
     void readEyeData()
     {
-        // egal wenn noch nicht neu da dann sowieso gleicher Wert wie vorher
-
         if (SRanipal_Eye_Framework.Status != SRanipal_Eye_Framework.FrameworkStatus.WORKING &&
             SRanipal_Eye_Framework.Status != SRanipal_Eye_Framework.FrameworkStatus.NOT_SUPPORT) return;
 
@@ -310,7 +312,7 @@ public class SaccadeDetection : MonoBehaviour
     /// </summary>
     void calculateEyeSpeedAndAcceleration()
     {
-        if (!SeparateEye)
+        if (!separateEye)
         {
             calculateEyeSpeedAndAcceleration(eyeDirectionLocal, oldGazeDirectionCombinedLocal, oldSpeed);
             storeSpeed(speed);
@@ -389,6 +391,7 @@ public class SaccadeDetection : MonoBehaviour
         else if (!areBothEyesClosed() && blink)
         {
             blink = false;
+            BlinkIsOver.Invoke();
         }
 
         if (!areBothEyesOpen())
@@ -396,6 +399,10 @@ public class SaccadeDetection : MonoBehaviour
             // pause saccadeDetection
             blockedTimer = 0;
             sampleCounter = 0;
+            if (saccade)
+            {
+                SaccadeIsOver.Invoke();
+            }
             saccade = false;
         }
     }
@@ -425,35 +432,34 @@ public class SaccadeDetection : MonoBehaviour
     {
         // blink: SaccadeDetection blocked until eyes open again + breakThreshold
 
-        if (areBothEyesOpen() && blockedTimer > breakThreshold)
+        if (areBothEyesOpen() && blockedTimer > breakTimer)
         {
             
             // BasicCondition or SeparateCondition
-            if ((!SeparateEye && basicSaccadeCondition()) || (SeparateEye && separateSaccadeCondition()))
+            if ((!separateEye && basicSaccadeCondition()) || (separateEye && separateSaccadeCondition()))
             {
                 // might be a Saccade because of eye movement
                 sampleCounter++;
                 // sample duration?
                 // check onceSpeed and onceAcc
-                if (sampleCounter >= sampleThreshold && onceAccSaccadeCondition() && onceSpeedSaccadeCondition())
+                if (sampleCounter >= minimumSamples && onceAccSaccadeCondition() && onceSpeedSaccadeCondition())
                 {
                     saccadeOccurred();
                 }
             }
             // no Saccade/ Saccade is over
-            else if ((!SeparateEye && basicNoSaccadeCondition()) || (SeparateEye && separateNoSaccadeCondition()))
+            else if ((!separateEye && basicNoSaccadeCondition()) || (separateEye && separateNoSaccadeCondition()))
             {
-                saccade = false;
-                sampleCounter = 0;
+                saccadeEnded();
             }
         }
-        /*if (timestamp > 3114868 && timestamp < 3114943)
+        // no Saccade/ Saccade is over
+        else
         {
-            Debug.Log("timestamp: " + timestamp + "  eyes open: " + areBothEyesOpen() + "   timer: " + (blockedTimer > breakThreshold)
-            + "\n" + "speedLeft, Right: " + speedLeft + ", " + speedRight + "  accLeft, Right: " + accelerationLeft + ", " + accelerationRight + "   saccadeCondition: " + basicSaccadeCondition() + "   Counter: " + sampleCounter + "\n" + 
-            "  OnceSpeed: " + onceSpeedSaccadeCondition() + "   OnceAcc: " + onceAccSaccadeCondition());
-        }*/
+            saccadeEnded();
+        }
     }
+
 
     #region Help Methods Saccade Detection
     bool basicSaccadeCondition()
@@ -487,7 +493,7 @@ public class SaccadeDetection : MonoBehaviour
     {
         foreach (float oneAcc in lastAccelerations)
         {
-            if (oneAcc > accelerationThreshold) return true;
+            if (oneAcc > accelerationThresholdOnce) return true;
         }
         return false;
     }
@@ -524,6 +530,18 @@ public class SaccadeDetection : MonoBehaviour
             SaccadeOccured.Invoke();
         }
     }
+
+    void saccadeEnded()
+    {
+        if (saccade)
+        {
+            SaccadeIsOver.Invoke();
+        }
+        saccade = false;
+        sampleCounter = 0;
+    }
+
+
     #endregion
     #endregion
 
@@ -540,7 +558,7 @@ public class SaccadeDetection : MonoBehaviour
         }
         oldTimeStamp = timestamp;
 
-        if (SeparateEye)
+        if (separateEye)
         {
             oldEyeDirectionLeftLocal = eyeDirectionLeftLocal;
             oldSpeedLeft = speedLeft;
@@ -602,7 +620,7 @@ public class SaccadeDetection : MonoBehaviour
 
     void storeAcceleration(float currAcc)
     {
-        if (currAccIndex >= accelerationFrameRange)
+        if (currAccIndex >= onceFrameRange)
         {
             currAccIndex = 0;
         }
@@ -619,7 +637,7 @@ public class SaccadeDetection : MonoBehaviour
 
     void storeSpeed(float currSpeed)
     {
-        if (currAccIndex >= accelerationFrameRange)
+        if (currAccIndex >= onceFrameRange)
         {
             currAccIndex = 0;
         }
@@ -713,8 +731,8 @@ public class SaccadeDetection : MonoBehaviour
     public string SendSettings(string NEXT_ROW, string DELIMITER)
     {
         return ("SETTINGS:" + NEXT_ROW +
-        "Saccade Detection Mode:" + DELIMITER + "Separate Eye" + DELIMITER + SeparateEye + NEXT_ROW +
-        "Saccade Detection Thresholds:" + DELIMITER + "Speed" + DELIMITER + speedThreshold + DELIMITER + "Noise" + DELIMITER + speedNoiseThreshold + DELIMITER + "Acceleration" + DELIMITER + accelerationThreshold + DELIMITER + "Sample" + DELIMITER + sampleThreshold + DELIMITER + "Break" + DELIMITER + breakThreshold + DELIMITER + "Closed Eye" + DELIMITER + closedEyeThreshold + NEXT_ROW
+        "Saccade Detection Mode:" + DELIMITER + "Separate Eye" + DELIMITER + separateEye + NEXT_ROW +
+        "Saccade Detection Thresholds:" + DELIMITER + "Speed" + DELIMITER + speedThreshold + DELIMITER + "Noise" + DELIMITER + speedNoiseThreshold + DELIMITER + "Acceleration" + DELIMITER + accelerationThresholdOnce + DELIMITER + "Sample" + DELIMITER + minimumSamples + DELIMITER + "Break" + DELIMITER + breakTimer + DELIMITER + "Closed Eye" + DELIMITER + closedEyeThreshold + NEXT_ROW
         + "Simulation: " + DELIMITER + SimulateInput + NEXT_ROW
         + "AllowedRange: " + DELIMITER);
     }
