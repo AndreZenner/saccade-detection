@@ -43,7 +43,7 @@ The data can easily be accessed by reading the public variable **saccade** of th
 
 **ExampleScript2** for accessing the data **via events**:  
 
-<p><img src="pics/readData-example2.PNG" alt="ExampleScript2 for accessing data via events" width="500"></p>
+<p><img src="pics/SD-Code-example2.PNG" alt="ExampleScript2 for accessing data via events" width="500"></p>
 
 To **subscribe to the unity events** you need to assign the GameObject carrying the script to the corresponding event. In this example I created an empty GameObject called *readData* and attached the script above (*ExampleScript2*) to it. Then you need to match the different methods from the script to the events.  
 
