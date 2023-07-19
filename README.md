@@ -16,6 +16,8 @@ To use our saccade detection in your Unity application, make sure to have the fo
 - [**SteamVR**](https://assetstore.unity.com/packages/tools/integration/steamvr-plugin-32647)
 - [**SRanipal**](https://developer.vive.com/resources/vive-sense/eye-and-facial-tracking-sdk/download/latest/)
 
+When SteamVR asks whether you want to create a new action set click on *yes*. A new window opens. Click *save and generate*.   
+
 ## How to Use
 ### Example Scene
 To check out an example scene, open and start any of the scenes coming with our package. For further details, look at the corresponding [Example Scene](#example-scenes) section  
