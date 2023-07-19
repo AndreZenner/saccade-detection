@@ -1,5 +1,5 @@
 # Saccade Detection
-A simple (heuristic-based) algorithm for online **saccade onset** and **blink** detection with the HTC Vive Pro Eye VR headset. The saccade detection is inspired by Sun et al.'s algorithm (Ref.??). We calculate the eye gaze *velocity* by comparing the two previous data samples for each frame. With this, we determine the eye gaze *acceleration*. The *number of successive samples* that must fulfill these criteria can be adapted too. In our algorithm, we also consider the noise data of the eye tracker by introducing a *speed noise threshold*. With the *separate eye* setting, you have the possibility to consider the more conservative velocity value of the left and right eye velocity. 
+A simple (heuristic-based) algorithm for online **saccade onset** and **blink** detection with the HTC Vive Pro Eye VR headset. The saccade detection is inspired by Sun et al.'s algorithm (2018). We calculate the eye gaze *velocity* by comparing the two previous data samples for each frame. With this, we determine the eye gaze *acceleration*. The *number of successive samples* that must fulfill these criteria can be adapted too. In our algorithm, we also consider the noise data of the eye tracker by introducing a *speed noise threshold*. With the *separate eye* setting, you have the possibility to consider the more conservative velocity value of the left and right eye velocity. 
 
 Most parameters of the Saccade Detection **algorithm can be modified in the inspector**.  
 Per default, the parameters are configured to perform well for our (few) test users and us. However, depending on your usage, another setting might perform more reliably - so feel free to adjust the given parameters.  
@@ -163,6 +163,11 @@ The path of the input file which should be used for the simulation of the *TestS
 **How many timestamps before/ after the true saccade onset count as correctly detected**. *The higher*, the more correct the correct/ false rate, but also, quite late detections count as correct. *The lower*, the higher the false rate since it will contain right but late detections.
 
 <p><img src="pics/TestScenario-inspector.PNG" alt="TestScenario" width="350"></p>
+
+
+## References  
+Qi Sun, Anjul Patney, Li-Yi Wei, Omer Shapira, Jingwan Lu, Paul Asente, Suwen Zhu, Morgan Mcguire, David Luebke, and Arie Kaufman. 2018. Towards virtual reality infinite walking: dynamic saccadic redirection. ACM Trans. Graph. 37, 4, Article 67 (August 2018), 13 pages. https://doi.org/10.1145/3197517.3201294  
+
 
 ## Credits
 Before use, please see the [LICENSE](LICENSE.md) for copyright and license details.
