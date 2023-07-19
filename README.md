@@ -1,5 +1,5 @@
 # Saccade Detection
-A simple (heuristic-based) algorithm for online **saccade onset** and **blink** detection with the HTC Vive Pro Eye VR headset.  
+A simple (heuristic-based) algorithm for online **saccade onset** and **blink** detection with the HTC Vive Pro Eye VR headset. This algorithm is inpsired by the saccade detection by Sun et al. (Ref.??). We calculate the eye gaze *velocity* by comparing the two previous data samples for each frame. With this we determine the eye gaze *acceleration*. The *number of successive samples* that must fulfill these criteria can be adapted too. In our algorithm we also consider the noise data of the eye tracker by introducing a *speed noise threshold*. With the *separate eye* setting, you have the possibility to consider the more conservative velocity value of the left and right eye velocity. 
 
 Most parameters of the Saccade Detection **algorithm can be modified in the inspector**.  
 Per default, the parameters are configured so that they perform well for us and our (few) test users. However, depending on your usage, another setting might perform more reliably - so feel free to adjust the given parameters.  
