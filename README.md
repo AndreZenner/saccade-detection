@@ -1,27 +1,27 @@
 # Saccade Detection
-A simple (heuristic-based) algorithm for online **saccade onset** and **blink** detection with the HTC Vive Pro Eye VR headset. This algorithm is inpsired by the saccade detection by Sun et al. (Ref.??). We calculate the eye gaze *velocity* by comparing the two previous data samples for each frame. With this we determine the eye gaze *acceleration*. The *number of successive samples* that must fulfill these criteria can be adapted too. In our algorithm we also consider the noise data of the eye tracker by introducing a *speed noise threshold*. With the *separate eye* setting, you have the possibility to consider the more conservative velocity value of the left and right eye velocity. 
+A simple (heuristic-based) algorithm for online **saccade onset** and **blink** detection with the HTC Vive Pro Eye VR headset. The saccade detection is inspired by Sun et al.'s algorithm (Ref.??). We calculate the eye gaze *velocity* by comparing the two previous data samples for each frame. With this, we determine the eye gaze *acceleration*. The *number of successive samples* that must fulfill these criteria can be adapted too. In our algorithm, we also consider the noise data of the eye tracker by introducing a *speed noise threshold*. With the *separate eye* setting, you have the possibility to consider the more conservative velocity value of the left and right eye velocity. 
 
 Most parameters of the Saccade Detection **algorithm can be modified in the inspector**.  
-Per default, the parameters are configured so that they perform well for us and our (few) test users. However, depending on your usage, another setting might perform more reliably - so feel free to adjust the given parameters.  
+Per default, the parameters are configured to perform well for our (few) test users and us. However, depending on your usage, another setting might perform more reliably - so feel free to adjust the given parameters.  
 
 For debugging purposes, detections are indicated by a sound and a message in the console.  
-Specifically, whenever a saccade occurs, a sound is played and 'saccade detected' shows up in the console. Once a saccade onset is detected the event `SaccadeOccured` is fired and the `saccade` variable turns `true`. When a blink is detected, a different sound is played and it is also written into the console. Once a blink is detected the event `BlinkOccured` is fired and the `blink` variable turns `true`.
+Specifically, whenever a saccade occurs, a sound is played, and 'saccade detected' appears in the console. Once a saccade onset is detected, the event `SaccadeOccured` is fired, and the `saccade` variable turns `true`. A blink detection is also written into the console and signalized with a different sound. Once a blink is detected, the event `BlinkOccured` is fired, and the `blink` variable turns `true`.
 
 ## Download
-To use our saccade detection, simply download and import [**saccade-detection-v3.unitypackage**](saccade-detection-v3.unitypackage) into your Unity project (tested with Unity version 2021.3.7f1 LTS).
+To use our saccade detection, download and import [**saccade-detection-v3.unitypackage**](saccade-detection-v3.unitypackage) into your Unity project (tested with Unity version 2021.3.7f1 LTS).
 
 ## Requirements
-To use our saccade detection in your own Unity application, make sure to have the following assets imported in your project:
+To use our saccade detection in your Unity application, make sure to have the following assets imported into your project:
 
 - [**SteamVR**](https://assetstore.unity.com/packages/tools/integration/steamvr-plugin-32647)
 - [**SRanipal**](https://developer.vive.com/resources/vive-sense/eye-and-facial-tracking-sdk/download/latest/)
 
 ## How to Use
 ### Example Scene
-To check out an example scene, just open and start any of the scenes that come with our package. For further details look at the corresponding [Example Scene](#example-scenes) section  
+To check out an example scene, open and start any of the scenes coming with our package. For further details, look at the corresponding [Example Scene](#example-scenes) section  
 
-### Adding Saccade Detection to Your Own Scene
-add to your scene:  
+### Adding Saccade Detection to Your Scene
+Add to your scene:  
 
   - **`SaccadeDetection prefab`**  
   - **`SRanipal_Eye_Framework prefab`** from SRanipal (ViveSR)   
@@ -32,7 +32,7 @@ add to your scene:
 <p><img src="pics/SRanipal-inspector-screenshot.PNG" alt="SRanipal Eye Framework Inspector" width="350"></p>
 
 
-**accessing data**:
+**Accessing data**:
 
 The data can easily be accessed by reading the public variable **saccade** of the Saccade Detection or by subscribing a callback method to the events **saccadeOccured()** and **saccadeIsOver()** (same with accessing the blink data).  
 
@@ -76,6 +76,9 @@ prints certain variable values into the console, such as:
 
 `Simulate Input`  
 *true*: the **tracking values** of the `.csv inputFile` in `TestScenario` **are used** for every algorithm analysis, resulting in better algorithm comparisons.
+
+`Simulate Events with Keyboard`  
+*true*: the saccade onset/end and the blink onset/end events can be triggered with the keyboard.  
 
 
 ### Saccade Detection Mode  
