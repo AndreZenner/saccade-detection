@@ -8,6 +8,7 @@ using ViveSR.anipal.Eye;
 
 public class SaccadeDetection : MonoBehaviour
 {
+    public static SaccadeDetection instance;
 
     #region Inspector
     [Header("Shown Data Settings")]
@@ -17,11 +18,15 @@ public class SaccadeDetection : MonoBehaviour
     public bool Show_Framerate = false;
     [Tooltip("true: writes 'Eyes closed' into the console whenever the EyeValue undercuts the closedEyeThreshold.")]
     public bool Show_Eye = false;
+    [Tooltip("true: shows the eye gaze in real-time")]
+    public bool Show_EyeGaze = true;
 
     [Header("TestMode")]
     public bool TestMode = false;
     [Tooltip("true: the .csv inputFile in !TestScenario! is used for every algorithm analysis, resulting in better comparisons.")]
     public bool SimulateInput = false;      // static bool for EyeCallback
+    [Tooltip("Invokes events (saccades, blinks) with the keyboard")]
+    public bool SimulateEventsWithKeyboard = false;
 
     [Tooltip("Saccade Detection Modes, additional to basic: Speed, Sample Threshold,..")]
     [Header("Saccade Detection Mode")]
@@ -88,23 +93,23 @@ public class SaccadeDetection : MonoBehaviour
     int currAccIndex = 0;
 
     // Eye Data
-    bool eye_callback_registered = false;                   // ?
+    bool eye_callback_registered = false;                   
     static EyeData_v2 eyeData = new EyeData_v2();           // current eye data
     
-    float eyeOpenessLeft = 0.0f;                        // current eyeOpeness ranging from 0 (closed) to 1 (open)
-    float eyeOpenessRight = 0.0f;                        // current eyeOpeness ranging from 0 (closed) to 1 (open)
+    float eyeOpenessLeft = 0.0f;                            // current eyeOpeness ranging from 0 (closed) to 1 (open)
+    float eyeOpenessRight = 0.0f;                           // current eyeOpeness ranging from 0 (closed) to 1 (open)
 
     // combined
-    Vector3 eyeOriginLocal;                                // current combined gazeOrigin in local coordinates
-    Vector3 eyeDirectionLocal;                             // current combined gazeDirection in local coordinates
+    Vector3 eyeOriginLocal;                                         // current combined gazeOrigin in local coordinates
+    Vector3 eyeDirectionLocal;                                      // current combined gazeDirection in local coordinates
     Vector3 oldGazeDirectionCombinedLocal = new Vector3(0, 0, 0);   // combined gazeDirection in local coordinates from one sample before
 
     // left            
-    Vector3 eyeOriginLeftLocal;                                // current combined gazeOrigin in local coordinates
+    Vector3 eyeOriginLeftLocal;                                 // current combined gazeOrigin in local coordinates
     Vector3 eyeOriginLeftGlobal;
-    Vector3 eyeDirectionLeftLocal;                             // current combined gazeDirection in local coordinates
+    Vector3 eyeDirectionLeftLocal;                              // current combined gazeDirection in local coordinates
     Vector3 eyeDirectionLeftGlobal;
-    Vector3 oldEyeDirectionLeftLocal = new Vector3(0, 0, 0);   // combined gazeDirection in local coordinates from one sample before
+    Vector3 oldEyeDirectionLeftLocal = new Vector3(0, 0, 0);    // combined gazeDirection in local coordinates from one sample before
     float speedLeft;
     float oldSpeedLeft = 0;
     float accelerationLeft;
@@ -133,9 +138,9 @@ public class SaccadeDetection : MonoBehaviour
     int oldTimeStamp = 0;       // timestamp from oldEyeData
     float deltaTime = 0;        // timestamp - oldTimeStamp / 1000              time difference between adjacent samples
     float angle;                // angle between oldGazeDirectionCombinedLocal and gazeDirectionCombinedLocal
-    float speed = 0.0f;         // angle movement / deltaTime             unit: degrees/s       for correct unit
+    float speed = 0.0f;         // angle movement / deltaTime             unit: degrees/s
     float oldSpeed = 0;         // speed from one sample before
-    float acceleration;         // (speed - oldSpeed) / deltaTime         unit: degrees/s^2     for correct unit
+    float acceleration;         // (speed - oldSpeed) / deltaTime         unit: degrees/s^2
     [HideInInspector]
     public bool saccade = false;        // true when saccade is detected. false when over again. Avoids detecting still ongoing but already detected saccade.
     static int sampleCounter = 0;       // counts the number of adjacent samples which fulfill the saccade criterion. if sampleCounter > sampleThreshold --> saccade
@@ -164,6 +169,8 @@ public class SaccadeDetection : MonoBehaviour
 
     private void Start()
     {
+        instance = this;
+
         if (!SRanipal_Eye_Framework.Instance.EnableEye)
         {
             enabled = false;
@@ -175,10 +182,28 @@ public class SaccadeDetection : MonoBehaviour
         currentSettings = new Settings(separateEye, speedThreshold, speedThresholdOnce, speedNoiseThreshold, accelerationThresholdOnce, minimumSamples, breakTimer, closedEyeThreshold);
         lastAccelerations = new float[onceFrameRange];
         lastSpeedValues = new float[onceFrameRange];
+
+        if (SimulateEventsWithKeyboard)
+        {
+            Debug.Log("leftShift saccade \n rightShift blink");
+        }
+
+        if (!Show_EyeGaze)
+        {
+            GameObject.Find("Gaze Ray Sample v2").gameObject.SetActive(false);
+            GameObject.Find("Gaze Ray Sample v2 (1)").gameObject.SetActive(false);
+            Debug.Log("eye gaze deactivated");
+        }
     }
 
     private void Update()
     {
+        if (SimulateEventsWithKeyboard)
+        {
+            checkKeyboardEvents();
+            return;
+        }
+
         manageDebugTimeFrames();
         blockedTimer += deltaTime;
         currentToOldValues();
@@ -193,6 +218,35 @@ public class SaccadeDetection : MonoBehaviour
             // only stored if logging activated or during TestMode --> press 'l'
             SaccadeDetectionDataAvailable.Invoke();
             processed = true;
+        }
+    }
+
+    void checkKeyboardEvents()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            // saccade detected
+            Debug.Log("saccade");
+            SaccadeOccured.Invoke();
+        }
+        else if (Input.GetKeyDown(KeyCode.RightShift))
+        {
+            // blink detected
+            Debug.Log("blink");
+            BlinkOccured.Invoke();
+        }
+
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            // saccade detected
+            //Debug.Log("saccadeIsOver");
+            SaccadeIsOver.Invoke();
+        }
+        else if (Input.GetKeyUp(KeyCode.RightShift))
+        {
+            // blink detected
+            //Debug.Log("blinkIsOver");
+            BlinkIsOver.Invoke();
         }
     }
 
@@ -331,7 +385,7 @@ public class SaccadeDetection : MonoBehaviour
         }
     }
 
-    // look @post regarding eye_data saccade calculation --> methods
+
     // 'normal' saccade speed: 300-400°/s, acceleration > 1000°/s^2
     // occur every 300-400ms, last about: 20-200ms
     void calculateEyeSpeedAndAcceleration(Vector3 gazeDirectionLocal, Vector3 oldGazeDirectionLocal, float oldSpeed)
@@ -371,15 +425,20 @@ public class SaccadeDetection : MonoBehaviour
             SRanipal_Eye_v2.GetEyeOpenness(EyeIndex.LEFT, out eyeOpenessLeft, eyeData);
             SRanipal_Eye_v2.GetEyeOpenness(EyeIndex.RIGHT, out eyeOpenessRight, eyeData);
         }
-       
+
         // eye closes
         if (areBothEyesClosed() && !blink)
         {
             if (TestMode && isExperimentRunning || !TestMode || SimulateInput)
-            {
-                Debug.Log("Blink");
-            }
+           
             blink = true;
+            // end saccade first
+            if (saccade)
+            {
+                SaccadeIsOver.Invoke();
+                saccade = false;
+            }
+            // trigger blink
             BlinkOccured.Invoke();
 
             if (!muted && blinkSound != null)
@@ -399,11 +458,6 @@ public class SaccadeDetection : MonoBehaviour
             // pause saccadeDetection
             blockedTimer = 0;
             sampleCounter = 0;
-            if (saccade)
-            {
-                SaccadeIsOver.Invoke();
-            }
-            saccade = false;
         }
     }
 
@@ -612,7 +666,7 @@ public class SaccadeDetection : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("If you want to play a detection sound make sure the 'Visualization&Header' category has everything thats needed");
+            Debug.LogWarning("If you want to play a detection sound make sure the 'Visualization&Header' category has everything needed");
         }
     }
 
@@ -782,6 +836,4 @@ public class SaccadeDetection : MonoBehaviour
         public float Break;
         public float ClosedEye;
     }
-
-
 }

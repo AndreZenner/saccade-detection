@@ -28,6 +28,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -47,20 +48,24 @@ MonoBehaviour:
   Show_PhysicalCalculations: 0
   Show_Framerate: 0
   Show_Eye: 0
+  Show_EyeGaze: 1
   TestMode: 0
   SimulateInput: 0
-  SeparateEye: 1
-  speedThreshold: 80
-  speedThresholdOnce: 130
-  speedNoiseThreshold: 650
-  accelerationThreshold: 1000
-  sampleThreshold: 2
-  breakThreshold: 0.07
+  SimulateEventsWithKeyboard: 0
+  separateEye: 0
+  speedThreshold: 200
+  speedThresholdOnce: 150
+  speedNoiseThreshold: 800
+  accelerationThresholdOnce: 1000
+  minimumSamples: 3
+  breakTimer: 0.01
   closedEyeThreshold: 0.2
   muted: 0
   blinkSound: {fileID: 8300000, guid: 2171da7d157ed2b4c907de4ce2177a93, type: 3}
   saccadeSound: {fileID: 8300000, guid: c29956ac9778a6e4095e3cc19374aee0, type: 3}
   myAudioSource: {fileID: 3274278243937221583}
+  saccade: 0
+  blink: 0
   NewDataAvailable:
     m_PersistentCalls:
       m_Calls: []
@@ -73,7 +78,13 @@ MonoBehaviour:
   SaccadeOccured:
     m_PersistentCalls:
       m_Calls: []
+  SaccadeIsOver:
+    m_PersistentCalls:
+      m_Calls: []
   BlinkOccured:
+    m_PersistentCalls:
+      m_Calls: []
+  BlinkIsOver:
     m_PersistentCalls:
       m_Calls: []
 --- !u!82 &3274278243937221583
