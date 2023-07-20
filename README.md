@@ -32,11 +32,6 @@ However, if you did not generate the SteamVR action set yourself, when starting 
 
 <p><img src="pics/SteamVRactions.PNG" alt="SteamVR actions?" width="450"></p>  
 
-  
-
-
-
-
 
 
 ## How to Use
@@ -52,7 +47,7 @@ Add to your scene:
     - select *Version 2* for `Enable Eye Version`  
   - **`CameraRig prefab`** from SteamVR  
     
-<p><img src="pics/SRanipal-inspector-screenshot.PNG" alt="SRanipal Eye Framework Inspector" width="350"></p>
+<p><img src="pics/SRanipal-inspector-screenshot.PNG" alt="SRanipal Eye Framework Inspector" width="350"></p>  
 
 
 **Accessing data**:
@@ -61,23 +56,23 @@ The data can easily be accessed by reading the public variable **saccade** of th
 
 **ExampleScript1** for accessing the data **via public variables**:  
 
-<p><img src="pics/readData-example1.svg" alt="ExampleScript1 for accessing data via public variables" width="500"></p>
+<p><img src="pics/readData-example1.PNG" alt="ExampleScript1 for accessing data via public variables" width="500"></p>  
 
 
 **ExampleScript2** for accessing the data **via events**:  
 
-<p><img src="pics/SD-Code-example2.svg" alt="ExampleScript2 for accessing data via events" width="500"></p>
+<p><img src="pics/SD-Code-example2.PNG" alt="ExampleScript2 for accessing data via events" width="500"></p>  
 
 To **subscribe to the unity events** you need to assign the GameObject carrying the script to the corresponding event. In this example, I created an empty GameObject called *readData* and attached the script above (*ExampleScript2*). Then you need to match the different methods from the script to the events.  
 
-<p><img src="pics/SD-Events-readingData.svg" alt="Saccade Detection Events" width="350"></p>
+<p><img src="pics/SD-Events-readingData.PNG" alt="Saccade Detection Events" width="350"></p>  
 
 
 ## Saccade Detection Inspector
 All the saccade and blink detection logic is implemented by the `SaccadeDetection` script (which is part of the prefab).  
 The picture below shows the *Saccade Detection Inspector* including all *adjustable variables*.
 
-<p><img src="pics/SDSetting.svg" alt="Saccade Detection Inspector" width="500"></p>
+<p><img src="pics/SDSetting.PNG" alt="Saccade Detection Inspector" width="500"></p>
 
 
 ### Shown Data Settings  
