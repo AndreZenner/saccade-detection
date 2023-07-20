@@ -1,5 +1,6 @@
 # Saccade Detection
-A simple (heuristic-based) algorithm for online **saccade onset** and **blink** detection with the HTC Vive Pro Eye VR headset. The saccade detection is inspired by Sun et al.'s algorithm (2018). We calculate the eye gaze *velocity* by comparing the two previous data samples for each frame. With this, we determine the eye gaze *acceleration*. The *number of successive samples* that must fulfill these criteria can be adapted too. In our algorithm, we also consider the noise data of the eye tracker by introducing a *speed noise threshold*. With the *separate eye* setting, you have the possibility to consider the more conservative velocity value of the left and right eye velocity. 
+A simple (heuristic-based) algorithm for online **saccade onset** and **blink** detection with the HTC Vive Pro Eye VR headset. The saccade detection is inspired by Sun et al.'s algorithm (2018). We calculate the eye gaze *velocity* by comparing the two previous data samples for each frame. With this, we determine the eye gaze *acceleration*. In our algorithm, we also consider the noise data of the eye tracker by introducing a *speed noise threshold*. Whenever this threshold is exceeded, we assume the high velocity to be caused by noise. All the mentioned calculations have their own threshold parameters (*speed threshold*, *acceleration threshold*, ..) that must be exceeded. Only when all these saccade detection parameters are fulfilled, a saccade is detected. The *number of successive samples* that must fulfill these criteria can be adapted too. With the *separate eye* setting, you have the possibility to consider the more conservative velocity value of the left and right eye velocity. 
+
 
 Most parameters of the Saccade Detection **algorithm can be modified in the inspector**.  
 Per default, the parameters are configured to perform well for our (few) test users and us. However, depending on your usage, another setting might perform more reliably - so feel free to adjust the given parameters.  
@@ -99,7 +100,7 @@ prints certain variable values into the console, such as:
 *true*: the **tracking values** of the `.csv inputFile` in `TestScenario` **are used** for every algorithm analysis, resulting in better algorithm comparisons.
 
 `Simulate Events with Keyboard`  
-*true*: the saccade onset/end and the blink onset/end events can be triggered with the keyboard.  
+*true*: the saccade onset/end and the blink onset/end events can be triggered with the keyboard (left shift: saccade, right shift: blink).  
 
 
 ### Saccade Detection Mode  
