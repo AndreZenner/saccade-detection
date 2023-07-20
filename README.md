@@ -16,7 +16,28 @@ To use our saccade detection in your Unity application, make sure to have the fo
 - [**SteamVR**](https://assetstore.unity.com/packages/tools/integration/steamvr-plugin-32647)
 - [**SRanipal**](https://developer.vive.com/resources/vive-sense/eye-and-facial-tracking-sdk/download/latest/)
 
-When SteamVR asks whether you want to create a new action set click on *yes*. A new window opens. Click *save and generate*.   
+After importing both requirements, you will be asked whether you want to accept the recommended project settings for SteamVR. Click on *Accept all*. 
+
+<p><img src="pics/ValveSteamVRUnitySettings.PNG" alt="RecommendedSettings" width="350"></p>  
+
+Click on *Window* and open the *SteamVR Input*. Click on *yes* in the new pop-up window to import the SteamVR Example Input File.  
+
+<p><img src="pics/SteamVRexample-file-input.PNG" alt="SteamVR example actions?" width="450"></p>
+
+Click on *save and generate* in the SteamVR Input window. 
+
+<p><img src="pics/SteamVRInput.PNG" alt="SteamVR Input actions generate" width="350"></p>  
+
+However, if you did not generate the SteamVR action set yourself, when starting the scene (and the headset is connected correctly), SteamVR Input will automatically ask you to import the action set. Then select the answers as described above.  
+
+<p><img src="pics/SteamVRactions.PNG" alt="SteamVR actions?" width="450"></p>  
+
+  
+
+
+
+
+
 
 ## How to Use
 ### Example Scene
