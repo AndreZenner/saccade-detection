@@ -26,7 +26,7 @@ Click on *Window* and open the *SteamVR Input*. Click on *yes* in the new pop-up
 
 Click on *save and generate* in the SteamVR Input window. 
 
-<p><img src="pics/SteamVRInput.PNG" alt="SteamVR Input actions generate" width="350"></p>  
+<p><img src="pics/SteamVRInputWindowGenerate.PNG" alt="SteamVR Input actions generate" width="350"></p>  
 
 However, if you did not generate the SteamVR action set yourself, when starting the scene (and the headset is connected correctly), SteamVR Input will automatically ask you to import the action set. Then select the answers as described above.  
 
