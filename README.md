@@ -18,7 +18,7 @@ To use our saccade detection in your Unity application, make sure to have the fo
 
 After importing both requirements, you will be asked whether you want to accept the recommended project settings for SteamVR. Click on *Accept all*. 
 
-<p><img src="pics/ValveSteamVRUnitySettings.PNG" alt="RecommendedSettings" width="350"></p>  
+<p><img src="pics/ValveSteamVRUnitySettings.PNG" alt="RecommendedSettings" width="300"></p>  
 
 Click on *Window* and open the *SteamVR Input*. Click on *yes* in the new pop-up window to import the SteamVR Example Input File.  
 
