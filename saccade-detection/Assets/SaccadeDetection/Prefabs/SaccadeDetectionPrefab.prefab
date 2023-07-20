@@ -49,7 +49,7 @@ MonoBehaviour:
   Show_Framerate: 0
   Show_Eye: 0
   Show_EyeGaze: 1
-  TestMode: 0
+  TestMode: 1
   SimulateInput: 0
   SimulateEventsWithKeyboard: 0
   separateEye: 0
